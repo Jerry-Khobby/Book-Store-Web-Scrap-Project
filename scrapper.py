@@ -38,6 +38,25 @@ def get_book_title(soup):
     # Return None if book title is not found
     return None
 
+
+def get_book_price(soup):
+    book_price_main = soup.find("div", class_="product_main")
+    
+    # Checking to see if there is any product_main div present
+    if book_price_main:
+        # Grabbing the paragraph where the price is located
+        sub_book_price = book_price_main.find("p", class_="price_color")
+        
+        # Checking if the sub_book_price element is found
+        if sub_book_price:
+            # Extract and return the text content of the price element
+            return sub_book_price.text.strip()
+    
+    # Return None if price element is not found
+    return None
+        
+   
+
 def extract_book_info(url):
     book_info={}
     print(f"Scraping URL: {url}")
@@ -47,6 +66,10 @@ def extract_book_info(url):
     soup = bs4.BeautifulSoup(html, "lxml")
     book_info["title"] = get_book_title(soup)
     print("Book Title:", book_info["title"])
+    #I want to scrap the price 
+    book_info["price"]=get_book_price(soup)
+    print("Book Title:", book_info["price"])
+
 
 
 
