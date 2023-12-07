@@ -54,8 +54,33 @@ def get_book_price(soup):
     
     # Return None if price element is not found
     return None
+
+
+# ... (your existing code)
+
+def get_book_details(soup):
+    details = {}
+    details_table = soup.find('table', class_='table table-striped')
+    
+    if details_table:
+        rows = details_table.find_all('tr')
         
-   
+        for row in rows:
+            header = row.find('th')
+            data = row.find('td')
+            
+            if header and data:
+                # Extract text content, strip extra spaces, and replace unwanted characters
+                row_key = header.text.strip()
+                row_value = data.text.strip().replace('\u200e', '')
+                details[row_key] = row_value
+        
+        return details
+    
+    # Return None if the details table is not found
+    return None
+
+
 
 def extract_book_info(url):
     book_info={}
@@ -66,9 +91,19 @@ def extract_book_info(url):
     soup = bs4.BeautifulSoup(html, "lxml")
     book_info["title"] = get_book_title(soup)
     print("Book Title:", book_info["title"])
-    #I want to scrap the price 
-    book_info["price"]=get_book_price(soup)
-    print("Book Title:", book_info["price"])
+    
+    # I want to scrap the price 
+    book_info["price"] = get_book_price(soup)
+    print("Book Price:", book_info["price"])
+    
+    # I want to scrap the details
+    book_info["details"] = get_book_details(soup)
+    print("Book Details:", book_info["details"])
+
+    return book_info 
+
+# ... (your existing code)
+
 
 
 
@@ -82,4 +117,12 @@ if __name__ == "__main__":
             url = row[0]
             books_data.append(extract_book_info(url))
             # I am breaking in order to stop on just the first URL 
-            #break
+        #break
+    output_file_name="output-{}.csv".format(
+          datetime.today().strftime("%m-%d-%Y"))
+    with open(output_file_name,'w') as outputfile:
+        writer=csv.writer(outputfile)
+        writer.writerow(books_data.pop().keys())
+        for book in books_data:
+            writer.writerow(book.values())    
+            
