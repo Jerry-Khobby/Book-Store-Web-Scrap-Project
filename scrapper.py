@@ -116,13 +116,25 @@ if __name__ == "__main__":
         for row in reader:
             url = row[0]
             books_data.append(extract_book_info(url))
-            # I am breaking in order to stop on just the first URL 
-        #break
-    output_file_name="output-{}.csv".format(
-          datetime.today().strftime("%m-%d-%Y"))
-    with open(output_file_name,'w') as outputfile:
-        writer=csv.writer(outputfile)
-        writer.writerow(books_data.pop().keys())
+
+    output_file_name = "output-{}.csv".format(
+        datetime.today().strftime("%m-%d-%Y"))
+    
+    # Extracting the keys from the first book's details as column headings
+    column_headings = list(books_data[0]["details"].keys())
+    column_headings.insert(0, "Title")  # Adding the Title column
+    column_headings.insert(1, "Price")  # Adding the Price column
+
+    with open(output_file_name, 'w', newline='') as outputfile:
+        writer = csv.writer(outputfile)
+        
+        # Writing the column headings to the CSV file
+        writer.writerow(column_headings)
+        
         for book in books_data:
-            writer.writerow(book.values())    
+            # Creating a list with values in the same order as column_headings
+            row_values = [book["title"], book["price"]] + [book["details"].get(key, "") for key in column_headings[2:]]
+            
+            # Writing the row to the CSV file
+            writer.writerow(row_values)
             
