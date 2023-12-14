@@ -49,6 +49,22 @@ def navigateboard():
     time.sleep(10)  # Add a sleep to wait for the page to load or use WebDriverWait
 
 
+def addnewtask():
+    # Locate and click the "Add a card" button using its XPath
+    time.sleep(5)
+    driver.find_element(By.XPATH, "//button[@data-testid='list-add-card-button']").click()
+    time.sleep(10)
+    #after this I will have to set a value for the field 
+    # Locate the textarea using its XPath
+    textarea = driver.find_element(By.XPATH, "//textarea[@data-testid='list-card-composer-textarea']")
+    textarea.clear()
+    time.sleep(2)
+    # Write "Bot Made successfully" into the textarea
+    textarea.send_keys("Bot Made successfully")
+    time.sleep(5)
+
+
+
         
 
 
@@ -59,6 +75,7 @@ def main():
         driver.get('https://trello.com/home')
         login()
         navigateboard()
+        addnewtask()
         driver.close()
     except Exception as e:
         print(e)
