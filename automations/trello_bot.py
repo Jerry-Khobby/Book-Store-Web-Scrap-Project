@@ -15,8 +15,12 @@ driver = webdriver.Chrome(options = option)
 
 
 
-
-
+#when it is done you can screen shot the success for me 
+def screenshotpage():
+    time.sleep(2)
+    date_str = date.today().strftime("%m-%d-%Y")
+    fpath = os.path.join(os.getcwd(), 'downloads/{}.png'.format(date_str))
+    driver.get_screenshot_as_file(fpath)
 # defining the function to enable me login 
 def login():
     with open('config.json') as configFile:
@@ -62,6 +66,12 @@ def addnewtask():
     # Write "Bot Made successfully" into the textarea
     textarea.send_keys("Bot Made successfully")
     time.sleep(5)
+    # Locate and click the "Add card" button using its XPath
+    driver.find_element(By.XPATH, "//button[@data-testid='list-card-composer-add-card-button']").click()
+    time.sleep(10)
+    # Locate and click the "Cancel" button using its XPath
+    driver.find_element(By.XPATH, "//button[@data-testid='list-card-composer-cancel-button']").click()
+    time.sleep(5)
 
 
 
@@ -76,6 +86,7 @@ def main():
         login()
         navigateboard()
         addnewtask()
+        screenshotpage()
         driver.close()
     except Exception as e:
         print(e)
