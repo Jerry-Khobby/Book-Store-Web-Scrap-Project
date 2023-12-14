@@ -23,7 +23,7 @@ def login():
         credentials = json.load(configFile)
         time.sleep(2)
         driver.find_element(By.XPATH,value="//a[text()='Log in']").click()
-        time.sleep(2)
+        time.sleep(5)
         username_input = driver.find_element(By.CSS_SELECTOR, "#username")
         username_input.send_keys(credentials['USERNAME'])
         time.sleep(5)
@@ -40,6 +40,14 @@ def login():
         login_button.click()
         time.sleep(20)
 
+# creating a function that will navigate through the board 
+def navigateboard():
+    # Locate and click the Trello board anchor tag using its XPath
+    time.sleep(5)
+    board_link = driver.find_element(By.XPATH, "//a[@class='board-tile']")
+    board_link.click()
+    time.sleep(10)  # Add a sleep to wait for the page to load or use WebDriverWait
+
 
         
 
@@ -50,6 +58,7 @@ def main():
     try:
         driver.get('https://trello.com/home')
         login()
+        navigateboard()
         driver.close()
     except Exception as e:
         print(e)
